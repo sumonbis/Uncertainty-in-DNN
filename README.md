@@ -1,2 +1,5 @@
-# Uncertainty-in-DNN
-Quantifying Uncertainty in Random Search for DNNHyperparameter Optimization using a First Order Type
+# Quantifying Uncertainty in Random Search for DNNHyperparameter Optimization using a First Order Type
+
+Hyperparameter  optimization  is  a  difficult  problem  in  developingdeep  learning  applications.  Recently,  random  search  strategy  has  been  provenas an efficient technique for optimizing certain hyperparameters. However, pro-grammers can not overtly represent uncertainty of the random hyper-parametervalues while performing a random search. In this project, we utilize a first or-der type Uncertain<T> to approximate the distributions of the hyperparametersso that programmers can pick values with certain confidence. Using this type torepresent uncertainty of random hyper-parameters allow us to easily propagatethis uncertainty through computations, perform statistical tests on distributionswithout resorting to complicated statistical concepts, and determine uncertain hy-perparameter value in required significance level.
+
+Keywords - Uncertainty, DNN, hyperparameter, optimization, machine-learning
