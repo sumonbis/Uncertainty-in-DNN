@@ -13,11 +13,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D
 from keras import backend as K
-from keras.wrappers.scikit_learn import KerasClassifier
-from sklearn.model_selection import train_test_split
 import numpy as np
-
-from sklearn.model_selection import RandomizedSearchCV
 
 
 batch_size = 128
@@ -30,12 +26,21 @@ img_rows, img_cols = 28, 28
 
 def input_data(percent):
     # the data, split between train and test sets
-    (x_train, y_train), (x_test, y_test) = mnist.load_data()
+    dataset = mnist.load_data()
 
-    indices = np.arange(x_train.shape[0])
-    np.random.shuffle(indices)
-    indices = np.arange(y_train.shape[0])
-    np.random.shuffle(indices)
+    (x_train, y_train), (x_test, y_test) = dataset
+
+    # x_train = np.random.shuffle(x_train)
+    # y_train = np.random.shuffle(y_train)
+
+    # indices = np.arange(x_train.shape[0])
+    # np.random.shuffle(indices)
+    # x_train = x_train[indices]
+    #
+    # indices = np.arange(y_train.shape[0])
+    # np.random.shuffle(indices)
+    # y_train = y_train[indices]
+
     x_train = x_train[:int(x_train.shape[0] * percent / 100)]
     y_train = y_train[:int(y_train.shape[0] * percent / 100)]
 
@@ -69,7 +74,7 @@ def input_data(percent):
     return x_train, y_train, x_test, y_test, input_shape
 
 
-def create_model(hidden_unit=64):
+def create_model(hidden_unit):
     if K.image_data_format() == 'channels_first':
         input_shape = (1, img_rows, img_cols)
     else:
@@ -78,7 +83,6 @@ def create_model(hidden_unit=64):
     model = Sequential()
     model.add(Conv2D(32, kernel_size=(3, 3),
                      activation='relu',
-                     # input_shape=input_shape))
                      input_shape=input_shape))
     model.add(Conv2D(64, (3, 3), activation='relu'))
     model.add(MaxPooling2D(pool_size=(2, 2)))
@@ -91,6 +95,7 @@ def create_model(hidden_unit=64):
     model.compile(loss=keras.losses.categorical_crossentropy,
                   optimizer=keras.optimizers.Adadelta(),
                   metrics=['accuracy'])
+    model.summary()
     return model
 
 
@@ -108,15 +113,15 @@ def evaluate(model, x_test, y_test):
     print('Test accuracy:', score[1])
     return score[0], score[1]
 
-def train_and_evaluate(percent, epoch):
+def train_and_evaluate(percent, epoch, hidden_unit):
     x_train, y_train, x_test, y_test, input_shape = input_data(percent)
-    dnn_model = create_model(hidden_unit=32)
+    dnn_model = create_model(hidden_unit)
     model = train(dnn_model, x_train, y_train, x_test, y_test, epoch)
     return evaluate(model, x_test, y_test)
     pass
 
 def main():
-    loss, acc = train_and_evaluate(10, 1)
+    loss, acc = train_and_evaluate(5, 1, 64)
     print(loss)
     print(acc)
 
