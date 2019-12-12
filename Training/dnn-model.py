@@ -1,0 +1,121 @@
+#!/bin/python
+# -*- coding: utf8 -*-
+
+'''
+Description: generate dnn model for random search
+Date: 2019-12-10
+'''
+
+from __future__ import print_function
+import keras
+from keras.datasets import mnist
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Conv2D, MaxPooling2D
+from keras import backend as K
+from keras.wrappers.scikit_learn import KerasClassifier
+from sklearn.model_selection import train_test_split
+import numpy as np
+
+from sklearn.model_selection import RandomizedSearchCV
+
+
+batch_size = 128
+num_classes = 10
+epochs = 1
+
+# input image dimensions
+img_rows, img_cols = 28, 28
+
+
+def input_data(percent):
+    # the data, split between train and test sets
+    (x_train, y_train), (x_test, y_test) = mnist.load_data()
+    print(x_train.shape[0])
+    x_train = x_train[:int(x_train.shape[0] * percent / 100)]
+    y_train = y_train[:int(y_train.shape[0] * percent / 100)]
+
+    # select a part of the dataset for training
+    # x = np.concatenate((x_train, x_test))
+    # y = np.concatenate((y_train, y_test))
+    # train_size = 0.1
+    # x_train, x_test, y_train, y_test = train_test_split(x, y, train_size=train_size) #, random_seed=2019
+
+    if K.image_data_format() == 'channels_first':
+        x_train = x_train.reshape(x_train.shape[0], 1, img_rows, img_cols)
+        x_test = x_test.reshape(x_test.shape[0], 1, img_rows, img_cols)
+        input_shape = (1, img_rows, img_cols)
+    else:
+        x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, 1)
+        x_test = x_test.reshape(x_test.shape[0], img_rows, img_cols, 1)
+        input_shape = (img_rows, img_cols, 1)
+
+    x_train = x_train.astype('float32')
+    x_test = x_test.astype('float32')
+    x_train /= 255
+    x_test /= 255
+    print('x_train shape:', x_train.shape)
+    print(x_train.shape[0], 'train samples')
+    print(x_test.shape[0], 'test samples')
+
+    # convert class vectors to binary class matrices
+    y_test = keras.utils.to_categorical(y_test, num_classes)
+    y_train = keras.utils.to_categorical(y_train, num_classes)
+
+    return x_train, y_train, x_test, y_test, input_shape
+
+
+def create_model(hidden_unit=64):
+    if K.image_data_format() == 'channels_first':
+        input_shape = (1, img_rows, img_cols)
+    else:
+        input_shape = (img_rows, img_cols, 1)
+
+    model = Sequential()
+    model.add(Conv2D(32, kernel_size=(3, 3),
+                     activation='relu',
+                     # input_shape=input_shape))
+                     input_shape=input_shape))
+    model.add(Conv2D(64, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
+    model.add(Flatten())
+    model.add(Dense(hidden_unit, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(num_classes, activation='softmax'))
+
+    model.compile(loss=keras.losses.categorical_crossentropy,
+                  optimizer=keras.optimizers.Adadelta(),
+                  metrics=['accuracy'])
+    return model
+
+
+def train(model, x_train, y_train, x_test, y_test, epoch):
+    model.fit(x_train, y_train,
+              batch_size=batch_size,
+              epochs=epochs,
+              verbose=1,
+              validation_data=(x_test, y_test))
+    return model
+
+def evaluate(model, x_test, y_test):
+    score = model.evaluate(x_test, y_test, verbose=0)
+    print('Test loss:', score[0])
+    print('Test accuracy:', score[1])
+    return score[0], score[1]
+
+def train_and_evaluate(percent, epoch):
+    x_train, y_train, x_test, y_test, input_shape = input_data(percent)
+    dnn_model = create_model(hidden_unit=32)
+    model = train(dnn_model, x_train, y_train, x_test, y_test, epoch)
+    return evaluate(model, x_test, y_test)
+    pass
+
+def main():
+    loss, acc = train_and_evaluate(10, 2)
+    print(loss)
+    print(acc)
+
+
+if __name__ == "__main__":
+    main()
