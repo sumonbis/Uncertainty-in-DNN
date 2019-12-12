@@ -31,7 +31,11 @@ img_rows, img_cols = 28, 28
 def input_data(percent):
     # the data, split between train and test sets
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
-    print(x_train.shape[0])
+
+    indices = np.arange(x_train.shape[0])
+    np.random.shuffle(indices)
+    indices = np.arange(y_train.shape[0])
+    np.random.shuffle(indices)
     x_train = x_train[:int(x_train.shape[0] * percent / 100)]
     y_train = y_train[:int(y_train.shape[0] * percent / 100)]
 
@@ -112,7 +116,7 @@ def train_and_evaluate(percent, epoch):
     pass
 
 def main():
-    loss, acc = train_and_evaluate(10, 2)
+    loss, acc = train_and_evaluate(10, 1)
     print(loss)
     print(acc)
 
