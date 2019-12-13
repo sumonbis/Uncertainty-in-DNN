@@ -30,16 +30,24 @@ def input_data(percent):
 
     (x_train, y_train), (x_test, y_test) = dataset
 
-    # x_train = np.random.shuffle(x_train)
+    #print(x_train.shape[0])
+
+    #x_train = np.random.shuffle(x_train)
+
+
+
+
     # y_train = np.random.shuffle(y_train)
 
-    # indices = np.arange(x_train.shape[0])
-    # np.random.shuffle(indices)
-    # x_train = x_train[indices]
+    indices = np.arange(x_train.shape[0])
+    np.random.shuffle(indices)
+    #
+    x_train = x_train[indices]
+    # print(x_train[indices])
     #
     # indices = np.arange(y_train.shape[0])
     # np.random.shuffle(indices)
-    # y_train = y_train[indices]
+    y_train = y_train[indices]
 
     x_train = x_train[:int(x_train.shape[0] * percent / 100)]
     y_train = y_train[:int(y_train.shape[0] * percent / 100)]
@@ -121,10 +129,9 @@ def train_and_evaluate(percent, epoch, hidden_unit):
     pass
 
 def main():
-    loss, acc = train_and_evaluate(5, 1, 64)
+    loss, acc = train_and_evaluate(100, 1, 64)
     print(loss)
     print(acc)
-
 
 if __name__ == "__main__":
     main()
