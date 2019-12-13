@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Uncertainty Quantification.iml" filepath="$PROJECT_DIR$/.idea/Uncertainty Quantification.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Uncertainty-in-DNN.iml" filepath="$PROJECT_DIR$/.idea/Uncertainty-in-DNN.iml" />
     </modules>
   </component>
 </project>
