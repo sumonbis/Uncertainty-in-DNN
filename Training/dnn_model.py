@@ -9,7 +9,6 @@ from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D
 from keras import backend as K
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 batch_size = 128
@@ -45,9 +44,9 @@ def input_data(percent):
     x_test = x_test.astype('float32')
     x_train /= 255
     x_test /= 255
-    print('x_train shape:', x_train.shape)
-    print(x_train.shape[0], 'train samples')
-    print(x_test.shape[0], 'test samples')
+    # print('x_train shape:', x_train.shape)
+    # print(x_train.shape[0], 'train samples')
+    # print(x_test.shape[0], 'test samples')
 
     # convert class vectors to binary class matrices
     y_test = keras.utils.to_categorical(y_test, num_classes)
@@ -77,12 +76,12 @@ def create_model(hidden_unit):
     model.compile(loss=keras.losses.categorical_crossentropy,
                   optimizer=keras.optimizers.Adadelta(),
                   metrics=['accuracy'])
-    model.summary()
+    #model.summary()
     return model
 
 
 def train(model, x_train, y_train, x_test, y_test, epoch):
-    print("\nTraining ...")
+    #print("\nTraining ...")
     model.fit(x_train, y_train,
               batch_size=batch_size,
               epochs=epochs,
@@ -92,8 +91,8 @@ def train(model, x_train, y_train, x_test, y_test, epoch):
 
 def evaluate(model, x_test, y_test):
     score = model.evaluate(x_test, y_test, verbose=0)
-    print('Test loss:', score[0])
-    print('Test accuracy:', score[1])
+    # print('Test loss:', score[0])
+    # print('Test accuracy:', score[1])
     #return score[0], score[1]
     return score[1]
 
@@ -105,7 +104,7 @@ def train_and_evaluate(percent, epoch, hidden_unit):
 
 def main():
     acc = train_and_evaluate(10, 1, 64)
-    print(acc)
+    #print(acc)
 
 if __name__ == "__main__":
     main()
