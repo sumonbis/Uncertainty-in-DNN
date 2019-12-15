@@ -102,7 +102,8 @@ def evaluate(model, x_test, y_test):
     #return score[0], score[1]
     return score[1]
 
-def train_and_evaluate(percent, epoch, hidden_unit, seed):
+def train_and_evaluate(percent, epoch, hidden_unit):
+    seed = random.randint(0, 10000)
     x_train, y_train, x_test, y_test, input_shape = input_data(percent, seed)
     dnn_model = create_model(hidden_unit)
     model = train(dnn_model, x_train, y_train, x_test, y_test, epoch)
@@ -110,8 +111,7 @@ def train_and_evaluate(percent, epoch, hidden_unit, seed):
 
 def main():
     #for i in range(100, 500, 10):
-    x = random.randint(0, 10000)
-    acc = train_and_evaluate(10, 1, 32, x)
+    acc = train_and_evaluate(10, 1, 32)
     print(acc)
 
 if __name__ == "__main__":
