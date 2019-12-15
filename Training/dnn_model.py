@@ -1,8 +1,6 @@
 #!/bin/python
 # -*- coding: utf8 -*-
 
-
-
 from __future__ import print_function
 import keras
 from keras.datasets import mnist
@@ -11,6 +9,7 @@ from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D
 from keras import backend as K
 import numpy as np
+import random
 import logging
 logging.getLogger('tensorflow').disabled = True
 
@@ -21,14 +20,19 @@ epochs = 1
 # input image dimensions
 img_rows, img_cols = 28, 28
 
-def input_data(percent):
+def input_data(percent, seed):
     # the data, split between train and test sets
     dataset = mnist.load_data()
     (x_train, y_train), (x_test, y_test) = dataset
     indices = np.arange(x_train.shape[0])
-    np.random.shuffle(indices)
+    #np.random.shuffle(indices)
+    random.Random(seed).shuffle(indices)
     x_train = x_train[indices]
     y_train = y_train[indices]
+
+
+    #print('x_train shape:', x_train[0])
+
 
     x_train = x_train[:int(x_train.shape[0] * percent / 100)]
     y_train = y_train[:int(y_train.shape[0] * percent / 100)]
@@ -98,15 +102,17 @@ def evaluate(model, x_test, y_test):
     #return score[0], score[1]
     return score[1]
 
-def train_and_evaluate(percent, epoch, hidden_unit):
-    x_train, y_train, x_test, y_test, input_shape = input_data(percent)
+def train_and_evaluate(percent, epoch, hidden_unit, seed):
+    x_train, y_train, x_test, y_test, input_shape = input_data(percent, seed)
     dnn_model = create_model(hidden_unit)
     model = train(dnn_model, x_train, y_train, x_test, y_test, epoch)
     return evaluate(model, x_test, y_test)
 
 def main():
-    acc = train_and_evaluate(10, 1, 64)
-    #print(acc)
+    #for i in range(100, 500, 10):
+    x = random.randint(0, 10000)
+    acc = train_and_evaluate(10, 1, 32, x)
+    print(acc)
 
 if __name__ == "__main__":
     main()
