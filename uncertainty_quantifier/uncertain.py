@@ -1,10 +1,15 @@
 import operator as op
 import statistics as stat
 import math
+import seaborn as sns
+import matplotlib.pyplot as plt
+
 
 class Uncertain:
     def __init__(self,sampler, *args):
-        self.sampleSize=1000
+        self.id=''
+        self.plotDensity=False
+        self.sampleSize=4
         self.samplingFunction = sampler
         self.args = list(args)
 
@@ -42,6 +47,16 @@ class Uncertain:
         data=[]
         for i in range(self.sampleSize):
             data.append(self.sample())
+
+        if self.plotDensity==True:
+            f=plt.figure()
+            sns.distplot(data, hist=False, rug=True)
+            plt.xlabel('Accuracy')
+            plt.ylabel('Density')
+            plt.savefig('result/'+self.id+'.png')
+            f.clear()
+            plt.close(f)
+
 
         print(data)
         std=stat.stdev(data)
