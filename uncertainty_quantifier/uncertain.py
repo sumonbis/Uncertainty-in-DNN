@@ -9,7 +9,7 @@ class Uncertain:
     def __init__(self,sampler, *args):
         self.id=''
         self.plotDensity=False
-        self.sampleSize=4
+        self.sampleSize=40
         self.samplingFunction = sampler
         self.args = list(args)
 
@@ -58,7 +58,7 @@ class Uncertain:
             plt.close(f)
 
 
-        print(data)
+        # print(data)
         std=stat.stdev(data)
         moe= (2*std)/math.sqrt(self.sampleSize)
 
