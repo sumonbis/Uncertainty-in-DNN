@@ -42,10 +42,10 @@ def main():
         # print(result)
         file.close()
 
-        model = create_model(result[0][0])
+        model = create_model(result[len(result)-1][0])
         model = train(model, x_train, y_train, x_test, y_test, 1)
         accuracy = evaluate(model, x_test, y_test)
-        file_overall.write(str(result[0][0])+','+str(accuracy)+'\n')
+        file_overall.write(str(result[len(result)-1][0])+','+str(accuracy)+'\n')
 
     elapsed_time = time.time() - start_time
 
