@@ -12,7 +12,7 @@ def main():
     file_overall = open('temp/overall.csv', 'w', encoding='utf-8')
     file_overall.write('hidden unit size,accuracy\n')
 
-    no_of_exp=4
+    no_of_exp=8
 
     x_train, y_train, x_test, y_test, input_shape = input_data(30,100)
 
