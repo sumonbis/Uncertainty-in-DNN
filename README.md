@@ -1,4 +1,4 @@
-# Quantifying Uncertainty in Random Search for DNNHyperparameter Optimization using a First Order Type
+# Quantifying Uncertainty of DNN Hyperparameter Optimization using a First Order Type
 
 Hyperparameter optimization is a difficult problem in developing deep learning applications. Recently, random search based strategies have been proven efficient for optimizing hyperparameters. However, programmers can not overtly represent uncertainty of the chosen hyperparameter values and accuracy of the model while performing a random search. In this project, we utilize a first order type Uncertain<T> to approximate the distributions of the hyperparame- ters so that programmers can pick values with certain confidence. This type helps us to represent uncertainty of random hyperparameters and allows us to easily propagate this uncertainty through computations, perform statistical tests on dis- tributions without resorting to complicated statistical concepts, and determine uncertain hyperparameter value in required significance level.
 
