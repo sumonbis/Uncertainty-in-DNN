@@ -40,10 +40,10 @@ def randomSearch(distributions, x_train, y_train, x_test, y_test, no_of_trials, 
 
 
 def main():
-    file_rs = open("result/randomSearch.csv", "w", encoding="utf-8")
+    file_rs = open("result/randomSearch.csv", "w+", encoding="utf-8")
     file_rs.write("hidden unit size, accuracy\n")
 
-    no_of_exp = 10
+    no_of_exp = 3
     no_of_trials = 10
 
     # x_train, y_train, x_test, y_test, input_shape = input_data(30)
