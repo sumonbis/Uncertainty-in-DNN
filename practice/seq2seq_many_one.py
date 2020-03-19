@@ -4,6 +4,10 @@ import unicodedata
 import re
 from practice.Encoder import Encoder
 from practice.Decoder import Decoder
+from scipy.special import softmax
+import seaborn as sns
+import matplotlib.pyplot as plt
+import math
 
 raw_data = (
     ('What a ridiculous concept!', 'Ki ajaira kotha !'),
@@ -89,7 +93,7 @@ def train_step(target_seq_in, target_seq_out, en_initial_states):
     return loss
 def predict():
     test_source_text = raw_data_en[np.random.choice(len(raw_data_en))]
-    test_source_text="dense sigmoid"
+    test_source_text="dense sigmoid add"
     print(test_source_text)
     test_source_seq = fr_tokenizer.texts_to_sequences([test_source_text])
     print(test_source_seq)
@@ -108,8 +112,27 @@ def predict():
     while True:
         de_output, de_state_h, de_state_c = decoder(
             de_input, (de_state_h, de_state_c))
+
+        flat_out=de_output.numpy().flatten()
+        soft_out=softmax(flat_out)
+        best_proba=soft_out[np.argmax(soft_out)]
+        se=math.sqrt((best_proba*(1.0-best_proba))/fr_vocab_size)
+        low=best_proba-(1.96*se)
+        high=best_proba+(1.96*se)
+        print('confidence interval: (low,high, se, best)',low, high,se,best_proba )
+        # print(type(soft_out))
+        # sns.distplot(soft_out, hist=False, kde=True, color='darkblue',
+        #              hist_kws={'edgecolor': 'black'})
+        # plt.show()
+
+        print("Source Sequence: ",test_source_text.split()[:i-1])
+        for _i,_p in enumerate(soft_out):
+            if _p>=low and _p<=high:
+                print(fr_tokenizer.index_word[_i])
+
         out = tf.argmax(de_output, -1)
-        a=out.numpy()[0][0]
+        # print(fr_tokenizer.index_word[out.numpy()[0][0]],fr_tokenizer.index_word[np.argmax(soft_out)])
+
         out_words.append(fr_tokenizer.index_word[out.numpy()[0][0]])
 
         if out_words[-1] == '<end>' or i > len(test_source_seq[0]):
