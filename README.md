@@ -7,9 +7,9 @@ To the best of our knowledge, there has not been any attempt to introduce the pr
 
 In this project, our goal is to aid the deep learning programmers to quantify uncer- tainty in the model hyperparameters and make an informed decision while initializing hyperparameters. A problem with the random search is that it doesn’t take uncertainty of random hyperparameters into account while picking a best value which may adversely impact models when trained on the different distribution of the input domain. To that end, we have leveraged a first order type Uncertain<T> to represent the uncertainty in the random hyperparameters and choose best value by performing statistical tests on the distribution. The main contributions of the project are:
 
-1. We have introduced the probabilistic programming concept in DNN hyperparame- ter optimization.
+1. We have introduced the probabilistic programming concept in DNN hyperparameter optimization.
 
-2. We have utilized a first order type Uncertain<T> to approximate the distributions over the possible hyperparameter values.
+2. We have utilized a first order type [***Uncertain T***](https://doi.org/10.1145/2541940.2541958) to approximate the distributions over the possible hyperparameter values.
 
 3. Describe the algebra to perform computations over the uncertain hyperparameters.
 
